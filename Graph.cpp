@@ -116,4 +116,428 @@ vector<vector<int>> Graph::getTranspose()
     return transpose;
 }
 
+vector<pair<int, int>> Graph::getEdgesSet()
+{
+        size_t n = this->adjancencyMatrix.size();
+        size_t m = this->adjancencyMatrix[0].size();
+        vector<pair<int, int>> edges;
+
+    if (this->directed)
+    {
+        for (size_t i = 0; i < n; i++)
+        {
+            for (size_t j = 0; j < m; j++)
+            {
+                if (this->adjancencyMatrix[i][j] != 0)
+                {
+                    
+                    edges.push_back(make_pair(i, j));
+                }
+            }
+        }
+    } 
+    else 
+    {
+        for (size_t i = 0; i < n/2; i++)
+        {
+            for (size_t j = i; j < m/2; j++)
+            {
+                if (this->adjancencyMatrix[i][j] != 0)
+                {
+                    edges.push_back(make_pair(i, j));
+                }
+            }
+        }
+    }
+    return edges;
+}
+
+vector<int> Graph::getVerticesSet()
+{
+    size_t n = this->adjancencyMatrix.size();
+    vector<int> vertices;
+
+    for (size_t i = 0; i < n; i++)
+    {
+        vertices.push_back(i);
+    }
+    return vertices;
+}
+
+ostream &ariel::operator<<(ostream &os, const Graph &g)
+{
+    size_t n = g.adjancencyMatrix.size();
+    size_t m = g.adjancencyMatrix[0].size();
+
+    for (size_t i = 0; i < n; i++)
+    {
+        os << "[";
+        for (size_t j = 0; j < m; j++)
+        {
+            os << g.adjancencyMatrix[i][j];
+            if (j != m - 1)
+            {
+                os << ", ";
+            }
+        }
+        os << "]";
+        if (i != n - 1)
+        {
+            os << ", ";
+        }
+        os << endl;
+    }
+    os << endl;
+    return os;
+}
+
+Graph ariel::operator+(const Graph &g1, const Graph &g2)
+{
+    size_t n1 = g1.adjancencyMatrix.size();
+    size_t m1 = g1.adjancencyMatrix[0].size();
+    size_t n2 = g2.adjancencyMatrix.size();
+    size_t m2 = g2.adjancencyMatrix[0].size();
+
+    // If the matrices are not the same size, throw an exception.
+    if (n1 != n2 || m1 != m2)
+    {
+        throw invalid_argument("The matrices must be the same size.");
+    }
+    vector<vector<int>> sum(n1, vector<int>(m1, 0));
+
+    // Iterate over the matrices and add the values.
+    for (size_t i = 0; i < n1; i++)
+    {
+        for (size_t j = 0; j < m1; j++)
+        {
+            sum[i][j] = g1.adjancencyMatrix[i][j] + g2.adjancencyMatrix[i][j];
+        }
+    }
+    Graph g;
+    g.loadGraph(sum);
+    return g;
+}
+
+Graph Graph::operator+=(Graph &g)
+{
+    size_t n1 = this->adjancencyMatrix.size();
+    size_t m1 = this->adjancencyMatrix[0].size();
+    size_t n2 = g.adjancencyMatrix.size();
+    size_t m2 = g.adjancencyMatrix[0].size();
+
+    // If the matrices are not the same size, throw an exception.
+    if (n1 != n2 || m1 != m2)
+    {
+        throw invalid_argument("The matrices must be the same size.");
+    }
+
+    // Iterate over the matrices and add the values.
+    for (size_t i = 0; i < n1; i++)
+    {
+        for (size_t j = 0; j < m1; j++)
+        {
+            this->adjancencyMatrix[i][j] += g.adjancencyMatrix[i][j];
+        }
+    }
+    this->edges = this->countEdges();
+    return *this;
+}
+
+Graph Graph::operator+()
+{
+    return *this;
+}
+
+Graph Graph::operator++()
+{
+    size_t n = this->adjancencyMatrix.size();
+    size_t m = this->adjancencyMatrix[0].size();
+
+    // Iterate over the matrix and increment the values.
+    for (size_t i = 0; i < n; i++)
+    {
+        for (size_t j = 0; j < m; j++)
+        {
+            if (this->adjancencyMatrix[i][j] != 0)
+            {
+                this->adjancencyMatrix[i][j]++;
+            }
+        }
+    }
+    this->edges = this->countEdges();
+    return *this;
+}
+
+Graph Graph::operator++(int)
+{
+    Graph g = *this;
+    size_t n = this->adjancencyMatrix.size();
+    size_t m = this->adjancencyMatrix[0].size();
+
+    // Iterate over the matrix and increment the values.
+    for (size_t i = 0; i < n; i++)
+    {
+        for (size_t j = 0; j < m; j++)
+        {
+            if (this->adjancencyMatrix[i][j] != 0)
+            {
+                this->adjancencyMatrix[i][j]++;
+            }
+        }
+    }
+    this->edges = this->countEdges();
+    return g;
+}
+
+Graph ariel::operator-(const Graph &g1, const Graph &g2)
+{
+    size_t n1 = g1.adjancencyMatrix.size();
+    size_t m1 = g1.adjancencyMatrix[0].size();
+    size_t n2 = g2.adjancencyMatrix.size();
+    size_t m2 = g2.adjancencyMatrix[0].size();
+
+    // If the matrices are not the same size, throw an exception.
+    if (n1 != n2 || m1 != m2)
+    {
+        throw invalid_argument("The matrices must be the same size.");
+    }
+    vector<vector<int>> diff(n1, vector<int>(m1, 0));
+
+    // Iterate over the matrices and subtract the values.
+    for (size_t i = 0; i < n1; i++)
+    {
+        for (size_t j = 0; j < m1; j++)
+        {
+            diff[i][j] = g1.adjancencyMatrix[i][j] - g2.adjancencyMatrix[i][j];
+        }
+    }
+    Graph g;
+    g.loadGraph(diff);
+    return g;
+}
+
+Graph Graph::operator-=(Graph &g)
+{
+    size_t n1 = this->adjancencyMatrix.size();
+    size_t m1 = this->adjancencyMatrix[0].size();
+    size_t n2 = g.adjancencyMatrix.size();
+    size_t m2 = g.adjancencyMatrix[0].size();
+
+    // If the matrices are not the same size, throw an exception.
+    if (n1 != n2 || m1 != m2)
+    {
+        throw invalid_argument("The matrices must be the same size.");
+    }
+
+    // Iterate over the matrices and subtract the values.
+    for (size_t i = 0; i < n1; i++)
+    {
+        for (size_t j = 0; j < m1; j++)
+        {
+            this->adjancencyMatrix[i][j] -= g.adjancencyMatrix[i][j];
+        }
+    }
+    this->edges = this->countEdges();
+    return *this;
+}
+
+Graph Graph::operator-()
+{
+    size_t n = this->adjancencyMatrix.size();
+    size_t m = this->adjancencyMatrix[0].size();
+
+    // Iterate over the matrix and negate the values.
+    for (size_t i = 0; i < n; i++)
+    {
+        for (size_t j = 0; j < m; j++)
+        {
+            if (this->adjancencyMatrix[i][j] != 0)
+            {
+                this->adjancencyMatrix[i][j] = -this->adjancencyMatrix[i][j];
+            }
+        }
+    }
+    return *this;
+}
+
+Graph Graph::operator--()
+{
+    size_t n = this->adjancencyMatrix.size();
+    size_t m = this->adjancencyMatrix[0].size();
+
+    // Iterate over the matrix and decrement the values.
+    for (size_t i = 0; i < n; i++)
+    {
+        for (size_t j = 0; j < m; j++)
+        {
+            if (this->adjancencyMatrix[i][j] != 0)
+            {
+                this->adjancencyMatrix[i][j]--;
+            }
+        }
+    }
+    this->edges = this->countEdges();
+    return *this;
+}
+
+Graph Graph::operator--(int)
+{
+    Graph g = *this;
+    size_t n = this->adjancencyMatrix.size();
+    size_t m = this->adjancencyMatrix[0].size();
+
+    // Iterate over the matrix and decrement the values.
+    for (size_t i = 0; i < n; i++)
+    {
+        for (size_t j = 0; j < m; j++)
+        {
+            this->adjancencyMatrix[i][j]--;
+        }
+    }
+    this->edges = this->countEdges();
+    return g;
+}
+
+Graph ariel::operator*(const Graph &g1, const Graph &g2)
+{
+    size_t n1 = g1.adjancencyMatrix.size();
+    size_t m1 = g1.adjancencyMatrix[0].size();
+    size_t n2 = g2.adjancencyMatrix.size();
+    size_t m2 = g2.adjancencyMatrix[0].size();
+
+    if ((n1 != m2) || (m1 != n2))
+    {
+        throw invalid_argument("The number of columns in the first matrix must be equal to the number of rows in the second matrix");
+    }
+
+    vector<vector<int>> diff(n1, vector<int>(m2, 0));
+
+    for (size_t i = 0; i < n1; i++)
+    {
+        for (size_t j = 0; j < m2; j++)
+        {
+            for (size_t k = 0; k < m1; k++)
+            {
+                diff[i][j] += g1.adjancencyMatrix[i][k] * g2.adjancencyMatrix[k][j];
+            }
+        }
+    }
+
+    Graph g;
+    g.loadGraph(diff);
+    return g;
+
+}
+
+Graph Graph::operator*=(int scalar)
+{
+    size_t n = this->adjancencyMatrix.size();
+    size_t m = this->adjancencyMatrix[0].size();
+
+    for (size_t i = 0; i < n; i++)
+    {
+        for (size_t j = 0; j < m; j++)
+        {
+            this->adjancencyMatrix[i][j] *= scalar;
+        }
+    }
+    this->edges = this->countEdges();
+    return *this;
+}
+
+Graph Graph::operator/=(int scalar)
+{
+    if (scalar == 0)
+    {
+        throw invalid_argument("Cannot divide by 0.");
+    }
+    size_t n = this->adjancencyMatrix.size();
+    size_t m = this->adjancencyMatrix[0].size();
+
+    for (size_t i = 0; i < n; i++)
+    {
+        for (size_t j = 0; j < m; j++)
+        {
+            this->adjancencyMatrix[i][j] /= scalar;
+        }
+    }
+    this->edges = this->countEdges();
+    return *this;
+}
+
+bool ariel::operator==(const Graph &g1, const Graph &g2)
+{
+    size_t n1 = g1.adjancencyMatrix.size();
+    size_t m1 = g1.adjancencyMatrix[0].size();
+    size_t n2 = g2.adjancencyMatrix.size();
+    size_t m2 = g2.adjancencyMatrix[0].size();
+    bool flag = false;
+    if (n1 != n2 || m1 != m2)
+    {
+        return flag;
+    }
+
+    for (size_t i = 0; i < n1; i++)
+    {
+        for (size_t j = 0; j < m1; j++)
+        {
+            if (g1.adjancencyMatrix[i][j] != g2.adjancencyMatrix[i][j])
+            {
+                return flag;
+            }
+        }
+    }
+    flag = true;
+    return flag ||(!(g1< g2) && !(g2 < g1));
+}
+
+bool ariel::operator!=(const Graph &g1, const Graph &g2)
+{
+    return !(g1 == g2);
+}
+
+bool ariel::operator<(const Graph &g1, const Graph &g2)
+{
+    size_t n1 = g1.adjancencyMatrix.size();
+    size_t m1 = g1.adjancencyMatrix[0].size();
+    size_t n2 = g2.adjancencyMatrix.size();
+    size_t m2 = g2.adjancencyMatrix[0].size();
+    size_t edges1 = g1.edges;
+    size_t edges2 = g2.edges;
+
+    if (n1 != n2 || m1 != m2)
+    {
+        
+        return edges1 < edges2;
+    }
+    
+    for (size_t i = 0; i < n1; i++)
+    {
+        for (size_t j = 0; j < m1; j++)
+        {
+            if (g1.adjancencyMatrix[i][j] >= g2.adjancencyMatrix[i][j])
+            {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+bool ariel::operator<=(const Graph &g1, const Graph &g2)
+{
+    return (g1 < g2) || (g1 == g2);
+}
+
+bool ariel::operator>(const Graph &g1, const Graph &g2)
+{
+    return !(g1 <= g2);
+}
+
+bool ariel::operator>=(const Graph &g1, const Graph &g2)
+{
+    return !(g1 < g2);
+}
+
+
 

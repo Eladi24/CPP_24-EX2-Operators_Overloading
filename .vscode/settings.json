@@ -1,0 +1,30 @@
+{
+    "files.associations": {
+        "array": "cpp",
+        "chrono": "cpp",
+        "compare": "cpp",
+        "coroutine": "cpp",
+        "deque": "cpp",
+        "forward_list": "cpp",
+        "list": "cpp",
+        "string": "cpp",
+        "vector": "cpp",
+        "memory": "cpp",
+        "optional": "cpp",
+        "string_view": "cpp",
+        "ranges": "cpp",
+        "thread": "cpp",
+        "regex": "cpp",
+        "tuple": "cpp",
+        "variant": "cpp",
+        "stdexcept": "cpp",
+        "iosfwd": "cpp"
+    },
+    "makefile.launchConfigurations": [
+        {
+            "cwd": "/home/eladubuntu/Git Projects/CPP_24-EX2-Operators_Overloading",
+            "binaryPath": "/home/eladubuntu/Git Projects/CPP_24-EX2-Operators_Overloading/test",
+            "binaryArgs": []
+        }
+    ]
+}
