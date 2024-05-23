@@ -10,6 +10,7 @@ using ariel::Algorithms;
 #include <iostream>
 #include <stdexcept>
 #include <vector>
+#include <sstream>
 using namespace std;
 
 int main()
@@ -23,6 +24,12 @@ int main()
     g1.loadGraph(graph); // Load the graph to the object.
 
     cout<<g1; // Should print the matrix of the graph: [0, 1, 0], [1, 0, 1], [0, 1, 0]
+    // set<pair<int, int>> g1Edges = g1.getEdgesSet();
+    // for (auto edge : g1Edges)
+    // {
+    //     cout << "(" << edge.first << ", " << edge.second << ") "; // Should print (0, 1) (1, 2) (2, 1)
+    // }
+    // cout << endl;
 
     // 3x3 matrix that represents a weighted connected graph.
     vector<vector<int>> weightedGraph = {
@@ -31,6 +38,12 @@ int main()
         {1, 2, 0}};
     ariel::Graph g2;
     g2.loadGraph(weightedGraph); // Load the graph to the object.
+    // set<pair<int, int>> g2Edges = g2.getEdgesSet();
+    // for (auto edge : g2Edges)
+    // {
+    //     cout << "(" << edge.first << ", " << edge.second << ") "; // Should print (0, 1) (0, 2) (1, 2) (2, 0) (2, 1)
+    // }
+    // cout << endl;
 
     ariel::Graph g3 = g1 + g2; // Add the two graphs together.
     cout<<g3;           // Should print the matrix of the graph: [0, 2, 1], [2, 0, 3], [1, 3, 0]
@@ -60,5 +73,5 @@ int main()
     catch (const std::invalid_argument &e)
     {
         cout << e.what() << endl; // Should print "The number of columns in the first matrix must be equal to the number of rows in the second matrix."
-    }
+    }    
 }

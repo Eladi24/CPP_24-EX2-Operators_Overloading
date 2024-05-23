@@ -18,12 +18,20 @@
         "tuple": "cpp",
         "variant": "cpp",
         "stdexcept": "cpp",
-        "iosfwd": "cpp"
+        "iosfwd": "cpp",
+        "iostream": "cpp",
+        "ostream": "cpp",
+        "set": "cpp"
     },
     "makefile.launchConfigurations": [
         {
             "cwd": "/home/eladubuntu/Git Projects/CPP_24-EX2-Operators_Overloading",
             "binaryPath": "/home/eladubuntu/Git Projects/CPP_24-EX2-Operators_Overloading/test",
+            "binaryArgs": []
+        },
+        {
+            "cwd": "/home/eladubuntu/Git Projects/CPP_24-EX2-Operators_Overloading",
+            "binaryPath": "/home/eladubuntu/Git Projects/CPP_24-EX2-Operators_Overloading/demo",
             "binaryArgs": []
         }
     ]

@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <vector>
+#include <set>
 #include "Graph.hpp"
 using ariel::Graph;
 using namespace std;
@@ -116,11 +117,11 @@ vector<vector<int>> Graph::getTranspose()
     return transpose;
 }
 
-vector<pair<int, int>> Graph::getEdgesSet()
+set<pair<int, int>> Graph::getEdgesSet() const
 {
         size_t n = this->adjancencyMatrix.size();
         size_t m = this->adjancencyMatrix[0].size();
-        vector<pair<int, int>> edges;
+        set<pair<int, int>> edges;
 
     if (this->directed)
     {
@@ -131,20 +132,20 @@ vector<pair<int, int>> Graph::getEdgesSet()
                 if (this->adjancencyMatrix[i][j] != 0)
                 {
                     
-                    edges.push_back(make_pair(i, j));
+                    edges.emplace(i, j);
                 }
             }
         }
     } 
     else 
     {
-        for (size_t i = 0; i < n/2; i++)
+        for (size_t i = 0; i < n; i++)
         {
-            for (size_t j = i; j < m/2; j++)
+            for (size_t j = i; j < m; j++)
             {
                 if (this->adjancencyMatrix[i][j] != 0)
                 {
-                    edges.push_back(make_pair(i, j));
+                    edges.emplace(i, j);
                 }
             }
         }
@@ -162,6 +163,37 @@ vector<int> Graph::getVerticesSet()
         vertices.push_back(i);
     }
     return vertices;
+}
+
+bool Graph::isSubgraph(const Graph &g) const
+{
+    size_t n1 = this->adjancencyMatrix.size();
+    size_t m1 = this->adjancencyMatrix[0].size();
+    size_t n2 = g.adjancencyMatrix.size();
+    size_t m2 = g.adjancencyMatrix[0].size();
+
+    set<pair<int, int>> edges1 = this->getEdgesSet();
+    set<pair<int, int>> edges2 = g.getEdgesSet();
+
+    if (n1 < n2 || m1 < m2)
+    {
+        return false;
+    }
+
+    if (edges1.size() <= edges2.size())
+    {
+        return false;
+    }
+
+    for (auto edge2 : edges2)
+    {
+        if (edges1.find(edge2) == edges1.end())
+        {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 ostream &ariel::operator<<(ostream &os, const Graph &g)
@@ -493,7 +525,7 @@ bool ariel::operator==(const Graph &g1, const Graph &g2)
 
 bool ariel::operator!=(const Graph &g1, const Graph &g2)
 {
-    return !(g1 == g2);
+    return !((g1 == g2) && !(g1 < g2) && !(g2 < g1));
 }
 
 bool ariel::operator<(const Graph &g1, const Graph &g2)
@@ -504,24 +536,21 @@ bool ariel::operator<(const Graph &g1, const Graph &g2)
     size_t m2 = g2.adjancencyMatrix[0].size();
     size_t edges1 = g1.edges;
     size_t edges2 = g2.edges;
+    bool flag = false;
+    if (g2.isSubgraph(g1))
+    {
+        return true;
+    }
+    else if (!g2.isSubgraph(g1))
+    {
+        flag =  edges1 < edges2;
+    }
 
-    if (n1 != n2 || m1 != m2)
+    else if (edges1 == edges2)
     {
-        
-        return edges1 < edges2;
+        flag = (n1 < n2) || (m1 < m2);
     }
-    
-    for (size_t i = 0; i < n1; i++)
-    {
-        for (size_t j = 0; j < m1; j++)
-        {
-            if (g1.adjancencyMatrix[i][j] >= g2.adjancencyMatrix[i][j])
-            {
-                return false;
-            }
-        }
-    }
-    return true;
+    return flag;
 }
 
 bool ariel::operator<=(const Graph &g1, const Graph &g2)
@@ -531,12 +560,32 @@ bool ariel::operator<=(const Graph &g1, const Graph &g2)
 
 bool ariel::operator>(const Graph &g1, const Graph &g2)
 {
-    return !(g1 <= g2);
+    size_t n1 = g1.adjancencyMatrix.size();
+    size_t m1 = g1.adjancencyMatrix[0].size();
+    size_t n2 = g2.adjancencyMatrix.size();
+    size_t m2 = g2.adjancencyMatrix[0].size();
+    size_t edges1 = g1.edges;
+    size_t edges2 = g2.edges;
+    bool flag = false;
+    if (g1.isSubgraph(g2))
+    {
+        return true;
+    }
+    else if (!g1.isSubgraph(g2))
+    {
+        flag =  edges1 > edges2;
+    }
+
+    else if (edges1 == edges2)
+    {
+        flag = (n1 > n2) || (m1 > m2);
+    }
+    return flag;
 }
 
 bool ariel::operator>=(const Graph &g1, const Graph &g2)
 {
-    return !(g1 < g2);
+    return (g1 > g2) || (g1 == g2);
 }
 
 

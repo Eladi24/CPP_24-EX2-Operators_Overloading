@@ -6,6 +6,7 @@
 
 #include <vector>
 #include <iostream>
+#include <set>
 using namespace std;
 namespace ariel
 {
@@ -77,9 +78,9 @@ namespace ariel
         /*
         * @brief
         * This function returns the edges of the graph as a set of pairs.
-        * @return vector<pair<int, int>> - set of pairs representing the edges of the graph.
+        * @return set<pair<int, int>> - set of pairs representing the edges of the graph.
         */
-        vector<pair<int, int>> getEdgesSet();
+        set<pair<int, int>> getEdgesSet() const;
 
         /*
         * @brief
@@ -109,6 +110,14 @@ namespace ariel
         * @return vector<vector<int>> - transpose of the adjacency matrix.
         */
         vector<vector<int>> getTranspose();
+
+        /*
+        * @brief
+        * This function checks if a given graph is a subgraph of the current graph.
+        * @param g - graph to check if it is a subgraph.
+        * @return bool - true if the graph is a subgraph, false otherwise.
+        */
+        bool isSubgraph(const Graph &g) const;
 
         /*
         * @brief
