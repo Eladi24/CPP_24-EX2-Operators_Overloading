@@ -290,9 +290,14 @@ Graph Graph::operator++()
     {
         for (size_t j = 0; j < m; j++)
         {
-            if (this->adjancencyMatrix[i][j] != 0)
+            if (this->adjancencyMatrix[i][j] != 0 && this->adjancencyMatrix[i][j] != -1)
             {
                 this->adjancencyMatrix[i][j]++;
+            }
+
+            else if (this->adjancencyMatrix[i][j] == -1)
+            {
+                this->adjancencyMatrix[i][j] = 1;
             }
         }
     }
@@ -311,9 +316,14 @@ Graph Graph::operator++(int)
     {
         for (size_t j = 0; j < m; j++)
         {
-            if (this->adjancencyMatrix[i][j] != 0)
+            if (this->adjancencyMatrix[i][j] != 0 && this->adjancencyMatrix[i][j] != -1)
             {
                 this->adjancencyMatrix[i][j]++;
+            }
+
+            else if (this->adjancencyMatrix[i][j] == -1)
+            {
+                this->adjancencyMatrix[i][j] = 1;
             }
         }
     }
@@ -402,9 +412,14 @@ Graph Graph::operator--()
     {
         for (size_t j = 0; j < m; j++)
         {
-            if (this->adjancencyMatrix[i][j] != 0)
+            if (this->adjancencyMatrix[i][j] != 0 && this->adjancencyMatrix[i][j] != 1)
             {
                 this->adjancencyMatrix[i][j]--;
+            }
+
+            else if (this->adjancencyMatrix[i][j] == 1)
+            {
+                this->adjancencyMatrix[i][j] = -1;
             }
         }
     }
@@ -423,7 +438,15 @@ Graph Graph::operator--(int)
     {
         for (size_t j = 0; j < m; j++)
         {
-            this->adjancencyMatrix[i][j]--;
+            if (this->adjancencyMatrix[i][j] != 0 && this->adjancencyMatrix[i][j] != 1)
+            {
+                this->adjancencyMatrix[i][j]--;
+            }
+
+            else if (this->adjancencyMatrix[i][j] == 1)
+            {
+                this->adjancencyMatrix[i][j] = -1;
+            }
         }
     }
     this->edges = this->countEdges();

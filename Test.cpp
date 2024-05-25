@@ -138,6 +138,22 @@ TEST_CASE("Adding a graph to itself")
     g3.loadGraph(expectedGraph);
     CHECK(++g1 == g3);
     CHECK(g1++ == g3);
+
+    ariel::Graph g4;
+    vector<vector<int>> graph2 = {
+        {0, -1, 0, 1},
+        {-1, 0, -1, 0},
+        {0, -1, 0, -1},
+        {1, 0, -1, 0}};
+    g4.loadGraph(graph2);
+    expectedGraph = {
+        {0, 1, 0, 2},
+        {1, 0, 1, 0},
+        {0, 1, 0, 1},
+        {2, 0, 1, 0}};
+    g3.loadGraph(expectedGraph);
+    CHECK(++g4 == g3);
+    CHECK(g4++ == g3);
 }
 
 TEST_CASE("Subtracting two graphs")
@@ -213,9 +229,9 @@ TEST_CASE("Subtracting a graph from itself")
     expectedGraph.loadGraph(expectedMat);
     CHECK(g1 == expectedGraph);
     expectedMat = {
-        {0, 0, 0, 0, 0},
+        {0, 0, -1, 0, 0},
         {0, 0, -3, 0, 0},
-        {0, -3, 0, -4, 0},
+        {-1, -3, 0, -4, 0},
         {0, 0, -4, 0, -6},
         {0, 0, 0, -6, 0}};
     expectedGraph.loadGraph(expectedMat);
