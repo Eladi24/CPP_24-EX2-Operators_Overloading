@@ -1,7 +1,5 @@
-/*
- * Demo program for Exercise 3.
- * Author: Benjamin Saldman.
- */
+// ID: 205739907
+// Email: eladima66@gmail.com
 
 #include "Graph.hpp"
 #include "Algorithms.hpp"
@@ -23,28 +21,14 @@ int main()
         {0, 1, 0}};
     g1.loadGraph(graph); // Load the graph to the object.
 
-    cout<<g1; // Should print the matrix of the graph: [0, 1, 0], [1, 0, 1], [0, 1, 0]
-    // set<pair<int, int>> g1Edges = g1.getEdgesSet();
-    // for (auto edge : g1Edges)
-    // {
-    //     cout << "(" << edge.first << ", " << edge.second << ") "; // Should print (0, 1) (1, 2) (2, 1)
-    // }
-    // cout << endl;
-
-    // 3x3 matrix that represents a weighted connected graph.
+    cout<<g1; 
     vector<vector<int>> weightedGraph = {
         {0, 1, 1},
         {1, 0, 2},
         {1, 2, 0}};
     ariel::Graph g2;
     g2.loadGraph(weightedGraph); // Load the graph to the object.
-    // set<pair<int, int>> g2Edges = g2.getEdgesSet();
-    // for (auto edge : g2Edges)
-    // {
-    //     cout << "(" << edge.first << ", " << edge.second << ") "; // Should print (0, 1) (0, 2) (1, 2) (2, 0) (2, 1)
-    // }
-    // cout << endl;
-
+   
     ariel::Graph g3 = g1 + g2; // Add the two graphs together.
     cout<<g3;           // Should print the matrix of the graph: [0, 2, 1], [2, 0, 3], [1, 3, 0]
     string s = "[0, 2, 1],\n[2, 0, 3],\n[1, 3, 0]\n\n";

@@ -187,6 +187,7 @@ bool Graph::isSubgraph(const Graph &g) const
 
     for (auto edge2 : edges2)
     {
+        // If the edge is not in the first graph, return false.
         if (edges1.find(edge2) == edges1.end())
         {
             return false;
@@ -543,7 +544,7 @@ bool ariel::operator==(const Graph &g1, const Graph &g2)
         }
     }
     flag = true;
-    return flag ||(!(g1< g2) && !(g2 < g1));
+    return flag;
 }
 
 bool ariel::operator!=(const Graph &g1, const Graph &g2)
